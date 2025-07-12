@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class CharacterController2D : MonoBehaviour
+public class NewController2d : MonoBehaviour
 {
-    [SerializeField] private float m_JumpForce = 15f;
+    [SerializeField] private float m_JumpForce = 400f;
     [Range(0, 1)][SerializeField] private float m_CrouchSpeed = .36f;
     [Range(0, .3f)][SerializeField] private float m_MovementSmoothing = .05f;
     [SerializeField] private bool m_AirControl = false;
@@ -12,27 +12,25 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_CeilingCheck;
     [SerializeField] private Collider2D m_CrouchDisableCollider;
 
+    [Header("Coyote Time & Jump Buffer")]
+    [SerializeField] private float coyoteTime = 0.1f;
+    [SerializeField] private float jumpBufferTime = 0.1f;
+
     const float k_GroundedRadius = .2f;
-    private bool m_Grounded;
     const float k_CeilingRadius = .2f;
+    private bool m_Grounded;
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;
     private Vector3 m_Velocity = Vector3.zero;
 
-    [Header("Technical Jumping")]
-    [SerializeField] private float coyoteTime = 0.1f;
-    [SerializeField] private float jumpBufferTime = 0.1f;
-
-    private float coyoteTimeCounter;
-    private float jumpBufferCounter;
+    private float lastGroundedTime;
+    private float lastJumpPressedTime;
 
     [Header("Events")]
-    [Space]
     public UnityEvent OnLandEvent;
 
     [System.Serializable]
     public class BoolEvent : UnityEvent<bool> { }
-
     public BoolEvent OnCrouchEvent;
     private bool m_wasCrouching = false;
 
@@ -42,9 +40,14 @@ public class CharacterController2D : MonoBehaviour
 
         if (OnLandEvent == null)
             OnLandEvent = new UnityEvent();
-
         if (OnCrouchEvent == null)
             OnCrouchEvent = new BoolEvent();
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Jump"))
+            lastJumpPressedTime = Time.time;
     }
 
     private void FixedUpdate()
@@ -58,37 +61,24 @@ public class CharacterController2D : MonoBehaviour
             if (colliders[i].gameObject != gameObject)
             {
                 m_Grounded = true;
+                lastGroundedTime = Time.time;
+
                 if (!wasGrounded)
                     OnLandEvent.Invoke();
             }
         }
-
-        if (m_Grounded)
-            coyoteTimeCounter = coyoteTime;
-        else
-            coyoteTimeCounter -= Time.fixedDeltaTime;
-
-        jumpBufferCounter -= Time.fixedDeltaTime;
     }
 
-    public void Move(float move, bool crouch, bool jump)
+    public void Move(float move, bool crouch, bool jumpInput)
     {
-        // Jump buffering logic
-        if (jump)
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
-
-        // Ceiling check for crouch
+        // Ceiling check
         if (!crouch)
         {
             if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
-            {
                 crouch = true;
-            }
         }
 
-        // Handle movement
+        // Movement
         if (m_Grounded || m_AirControl)
         {
             if (crouch)
@@ -125,25 +115,22 @@ public class CharacterController2D : MonoBehaviour
                 Flip();
         }
 
-        // Handle jump using buffer and coyote time
-        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        // Coyote Time + Jump Buffer check
+        bool canJump = Time.time - lastGroundedTime <= coyoteTime &&
+                       Time.time - lastJumpPressedTime <= jumpBufferTime;
+
+        if (canJump)
         {
-            Vector2 velocity = m_Rigidbody2D.velocity;
-            velocity.y = 0f;
-            m_Rigidbody2D.velocity = velocity;
-
-            m_Rigidbody2D.velocity += new Vector2(0f, m_JumpForce / m_Rigidbody2D.mass);
-
-            jumpBufferCounter = 0f;
-            coyoteTimeCounter = 0f;
             m_Grounded = false;
+            m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0f); // reset Y before jump
+            m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+            lastJumpPressedTime = -100f; // reset buffer so we don't double jump
         }
     }
 
     private void Flip()
     {
         m_FacingRight = !m_FacingRight;
-
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
