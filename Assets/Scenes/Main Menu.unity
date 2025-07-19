@@ -1131,7 +1131,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 877325630}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: Wait
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1183,6 +1183,6 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 259970317}
   - {fileID: 499588148}
   - {fileID: 402028134}
+  - {fileID: 259970317}

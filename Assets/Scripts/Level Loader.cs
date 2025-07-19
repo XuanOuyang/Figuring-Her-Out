@@ -27,13 +27,4 @@ public class LevelLoader : MonoBehaviour
             Debug.Log("Player entered range.");
         }
     }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playersInRange = Mathf.Max(playersInRange - 1, 0);
-            Debug.Log("Player left range.");
-        }
-    }
 }
