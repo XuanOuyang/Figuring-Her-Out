@@ -7,7 +7,7 @@ public class LevelLoader : MonoBehaviour
 
     void Update()
     {
-        if (playersInRange > 0 && Input.GetKeyDown(KeyCode.E))
+        if (playersInRange > 0 && Input.GetKeyDown(KeyCode.W))
         {
             LoadNextLevel();
         }
@@ -24,7 +24,16 @@ public class LevelLoader : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playersInRange++;
-            Debug.Log("Player entered range.");
+            Debug.Log("Player entered the level loader zone.");
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playersInRange = Mathf.Max(0, playersInRange - 1);
+            Debug.Log("Player left the level loader zone.");
         }
     }
 }

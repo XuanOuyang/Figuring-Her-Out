@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LowGravityLevel.unity
     guid: 423fd5759a291944fb281df9a3552393
+  - enabled: 1
+    path: Assets/Scenes/ColorSwitchingLevel.unity
+    guid: 471257ff136542e49b26c5272fa724da
   m_configObjects: {}
