@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlatformSwitcher : MonoBehaviour
 {
     public KeyCode switchKey = KeyCode.E;
+    public float SeeThoughtAmount = 0.01f;
 
     private GameObject[] redPlatforms;
     private GameObject[] bluePlatforms;
@@ -49,9 +50,8 @@ public class PlatformSwitcher : MonoBehaviour
         if (sr)
         {
             Color originalColor = sr.color;
-            originalColor.a = active ? 1f : 0.01f;  // 1 = fully visible, 0.3 = faded
+            originalColor.a = active ? 1f : SeeThoughtAmount;  // 1 = fully visible, 0.3 = faded
             sr.color = originalColor;
         }
     }
-
 }
