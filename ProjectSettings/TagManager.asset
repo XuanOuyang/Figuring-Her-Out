@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RedPlatform
   - BluePlatform
+  - KillZone
   layers:
   - Default
   - TransparentFX
