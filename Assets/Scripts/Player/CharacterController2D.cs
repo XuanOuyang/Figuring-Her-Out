@@ -156,5 +156,9 @@ public class CharacterController2D : MonoBehaviour
     {
         m_AirControl = enabled;
     }
+    public bool IsGrounded()
+    {
+        return m_Grounded; // Or whatever internal bool tracks ground state
+    }
 
 }
