@@ -9,10 +9,15 @@ public class GSwitch : MonoBehaviour
     public float normalGravity = 1;
     public float lowGravity = 1;
     public float normalJumpForce = 15f;
-    public float lowJumpForce = -15f; // negative because gravity is reversed
+    public float lowJumpForce = -15f;
     public bool allowAirControl = true;
-    public CharacterController2D characterController; // Reference to player controller
-    public Rigidbody2D playerRigidbody;              // Reference to player Rigidbody
+
+    public CharacterController2D characterController;
+    public Rigidbody2D playerRigidbody;
+    public PlayerMovement playerMovement;
+
+    public float normalRunSpeed = 40f;
+    public float lowRunSpeed = 20f;
 
     private bool gravityReversed = false;
 
@@ -41,14 +46,28 @@ public class GSwitch : MonoBehaviour
             playerRigidbody.gravityScale = lowGravity;
             Camera.main.backgroundColor = lowGColor;
             characterController.SetJumpForce(lowJumpForce);
-            characterController.SetAirControl(allowAirControl); // ← Disable air control
+            characterController.SetAirControl(allowAirControl);
         }
         else
         {
             playerRigidbody.gravityScale = normalGravity;
             Camera.main.backgroundColor = normalColor;
             characterController.SetJumpForce(normalJumpForce);
-            characterController.SetAirControl(true); // ← Enable air control
+            characterController.SetAirControl(true);
+        }
+    }
+
+    void Update()
+    {
+        if (!characterController.IsGrounded())
+        {
+            // Player is in the air
+            playerMovement.runSpeed = gravityReversed ? lowRunSpeed : normalRunSpeed;
+        }
+        else
+        {
+            // Player is grounded
+            playerMovement.runSpeed = normalRunSpeed;
         }
     }
 }
