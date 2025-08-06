@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 333ba4cdbc4db4d41b564a774a0998e7
   - enabled: 1
-    path: Assets/Scenes/TestLevel.unity
+    path: Assets/Scenes/Begining Level.unity
     guid: 6a7ff46d184aeb54c91598599f860fd9
   - enabled: 1
     path: Assets/Scenes/LowGravityLevel.unity
