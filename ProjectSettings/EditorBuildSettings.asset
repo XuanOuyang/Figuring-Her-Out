@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Back Story.unity
+    guid: f51491aa77c7e1f44bbc9ef82216d9c3
+  - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 333ba4cdbc4db4d41b564a774a0998e7
   - enabled: 1
@@ -17,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ColorSwitchingLevel.unity
     guid: 471257ff136542e49b26c5272fa724da
+  - enabled: 1
+    path: Assets/Scenes/Ending Level.unity
+    guid: 50d6582d64275cd4281fbc8972f158f6
   m_configObjects: {}
